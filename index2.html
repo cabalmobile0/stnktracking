@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Data STNK</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: Arial, Helvetica, sans-serif; 
+            background: #000000; /* Black background */
+            color: #e0e0e0; /* Light text color */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center; /* Center-align text in the body */
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.7); /* Slightly transparent black background */
+            margin: 0;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.8); /* Elegant pink underglow */
+        }
+
+        #search-input {
+            display: block;
+            width: calc(100% - 40px);
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1); /* Semi-transparent white background */
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.7); /* Soft mint green underglow */
+            transition: border-color 0.3s, box-shadow 0.3s;
+            text-align: center; /* Center-align the text inside the input */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.5); /* Elegant pink underglow */
+            text-align: center; /* Center-align text in the table */
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center; /* Center-align text in table cells */
+            color: #ffffff;
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.8); /* Darker background for header */
+            font-size: 18px;
+            border-bottom: 2px solid #8e2de2; /* Soft purple border */
+        }
+
+        td {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.8); /* Darker border for rows */
+        }
+
+        tr:hover {
+            background: rgba(0, 0, 0, 0.6); /* Slightly lighter background on hover */
+            transition: background-color 0.3s;
+        }
+
+        .track-button {
+            padding: 4px 8px; /* Smaller padding for a smaller button */
+            font-size: 12px; /* Smaller font size */
+            background: linear-gradient(135deg, #ff6ec4, #7873f5); /* Pink to purple gradient */
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.7); /* Pink underglow */
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .track-button:hover {
+            background: linear-gradient(135deg, #ff4d9a, #6a5acd); /* Darker pink to purple gradient on hover */
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.9); /* Brighter pink underglow on hover */
+        }
+
+        .first-column {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Space between text and button */
+            gap: 10px; /* Optional space between text and button */
+        }
+
+        .page-button {
+        padding: 10px 20px; /* Padding untuk tombol */
+        background: linear-gradient(135deg, #ff6ec4, #7873f5); /* Gradasi dari pink ke ungu */
+        border: none;
+        border-radius: 5px;
+        color: #ffffff;
+        font-size: 16px;
+        margin-top: -10px; /* Margin atas untuk memberi ruang */
+        cursor: pointer;
+        box-shadow: 0 0 10px rgba(255, 105, 180, 0.7); /* Cahaya pink */
+        transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+
+    .page-button:hover {
+        background: linear-gradient(135deg, #ff4d9a, #6a5acd); /* Gradasi lebih gelap saat hover */
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 105, 180, 0.9); /* Cahaya lebih terang saat hover */
+    }
+    </style>
+</head>
+<body>
+
+<h1>List Data STNK</h1>
+
+<!-- Input untuk pencarian -->
+<input type="text" id="search-input" placeholder="Cari data..." onkeyup="searchTable()">
+
+<!-- Tombol Kembali -->
+<button class="page-button" onclick="window.location.href='index.html';">Kembali</button>
+
+<table id="data-table">
+    <thead>
+        <tr id="header-row"></tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+</table>
+
+<script>
+    const SPREADSHEET_ID_1 = '14C5a4TEYbrx5pdUoVjio2kS3yikAN4ygm95BCkl4kGM'; // Ganti dengan ID spreadsheet pertama
+    const SPREADSHEET_ID_2 = '1AgB8uek81Q_Nd6aSyUAB9g2DFzoB5xz3bZR1RCO5fJg'; // Ganti dengan ID spreadsheet kedua
+    const API_KEY = 'AIzaSyD-5pzxAE3OQ_XwJS980gimWYrK5Jqg7mc'; // Ganti dengan API Key Anda
+    
+    const url1 = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID_1}/values/Sheet1?key=${API_KEY}`;
+    const url2 = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID_2}/values/Sheet1?key=${API_KEY}`;
+    
+    let originalData = [];
+
+    async function fetchData() {
+        const [data1, data2] = await Promise.all([fetch(url1), fetch(url2)]);
+
+        const result1 = await data1.json();
+        const result2 = await data2.json();
+
+        const values1 = result1.values;
+        const values2 = result2.values;
+
+        if (values1.length > 0 && values2.length > 0) {
+            const headerRow = document.getElementById('header-row');
+            const tableBody = document.getElementById('table-body');
+            
+            const headers = values1[0];
+            const selectedColumns = [0, 1, 2]; // Pilih kolom yang ingin ditampilkan
+
+            selectedColumns.forEach(index => {
+                const header = document.createElement('th');
+                header.textContent = headers[index];
+                headerRow.appendChild(header);
+            });
+
+            // Gabungkan data dari kedua spreadsheet
+            originalData = [...values1.slice(1), ...values2.slice(1)];
+
+            populateTable(originalData, selectedColumns);
+        } else {
+            console.log("No data found.");
+        }
+    }
+
+    function populateTable(data, selectedColumns) {
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = '';
+        
+        data.forEach((row) => {
+            const tableRow = document.createElement('tr');
+            
+            selectedColumns.forEach((colIndex) => {
+                const cell = document.createElement('td');
+
+                if (colIndex === 0) {
+                    cell.className = 'first-column';
+                    cell.innerHTML = `
+                        ${row[colIndex] || ''} 
+                        <button class="track-button" onclick="window.location.href='index.html?trackId=${row[colIndex]}'">Track</button>
+                    `;
+                } else {
+                    cell.textContent = row[colIndex] || '';
+                }
+
+                tableRow.appendChild(cell);
+            });
+
+            tableBody.appendChild(tableRow);
+        });
+    }
+
+    window.onload = fetchData;
+
+    // Fungsi untuk mencari data di tabel
+    function searchTable() {
+        const input = document.getElementById('search-input').value.toLowerCase(); // Ambil nilai input dan ubah ke lowercase
+        const table = document.getElementById('data-table');
+        const rows = table.getElementsByTagName('tr'); // Ambil semua baris dalam tabel
+
+        for (let i = 1; i < rows.length; i++) { // Loop melalui semua baris (kecuali header)
+            let cells = rows[i].getElementsByTagName('td');
+            let match = false;
+
+            // Loop melalui semua sel di baris tersebut
+            for (let j = 0; j < cells.length; j++) {
+                let cellValue = cells[j].textContent || cells[j].innerText;
+
+                if (cellValue.toLowerCase().indexOf(input) > -1) { // Jika ada kecocokan dengan input
+                    match = true;
+                    break; // Hentikan pencarian di baris ini
+                }
+            }
+
+            // Tampilkan baris jika ada kecocokan, sembunyikan jika tidak
+            rows[i].style.display = match ? '' : 'none';
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STNK Tracking</title>
+
+    <!-- Menghubungkan Google Font Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Menghubungkan styles.css -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>STNK Tracking</h2>
+    
+    <label for="trackId">Masukkan ID Pelacakan:</label><br>
+    <input type="text" id="trackId" placeholder="ID Pelacakan"><br><br>
+    
+    <button onclick="trackItem()">Lacak</button>
+    <button onclick="window.location.href='index2.html';">List STNK</button> <!-- Tombol untuk halaman lain -->
+    <!--<button onclick="pasteText()">Paste</button> Tombol Paste -->
+
+    <div id="trackResult" style="margin-top:20px;"></div>
+
+    <div id="timeline" class="timeline"></div>
+
+    <script src="script.js"></script>
+
+    <script>
+function getTrackIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('trackId');
+}
+
+window.onload = function() {
+    const trackId = getTrackIdFromURL();
+    if (trackId) {
+        const trackIdInput = document.getElementById('trackId');
+        trackIdInput.value = trackId; // Set the input with the track ID
+        trackItem(); // Memanggil fungsi pelacakan secara otomatis
+    }
+};
+</script>
+
+</body>
+</html>

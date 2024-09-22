@@ -1,0 +1,199 @@
+/* General styling */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #000000; /* Latar belakang hitam */
+    color: #e0e0e0; /* Warna teks terang */
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #e0e0e0;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.8); /* Efek glow cyan */
+}
+
+label {
+    font-weight: 600;
+    font-size: 18px;
+    color: #e0e0e0;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.7); /* Efek glow cyan */
+    margin-bottom: 10px; /* Menambahkan jarak bawah */
+}
+
+input[type="text"] {
+    width: 95%;
+    padding: 12px;
+    margin: 15px 0 25px 0; /* Menambahkan jarak atas dan bawah */
+    border: 2px solid #00bcd4; /* Garis input berwarna cyan */
+    border-radius: 12px;
+    font-size: 16px;
+    background-color: #1c1c1c;
+    color: #e0e0e0;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.6); /* Bayangan input cyan */
+    transition: all 0.3s ease;
+    margin-bottom: -30px;
+}
+
+input[type="text"]:focus {
+    border-color: #00bcd4;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+    outline: none;
+}
+
+button {
+    background-color: #00bcd4;
+    color: white;
+    padding: 14px 28px; /* Menambahkan padding */
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5); /* Bayangan button cyan */
+    margin: 10px 0; /* Menambahkan jarak atas dan bawah */
+}
+
+button:hover {
+    background-color: #00a2b1;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 255, 255, 0.7);
+}
+
+button:active {
+    background-color: #008c9e;
+    box-shadow: 0 6px 20px rgba(0, 255, 255, 0.6);
+}
+
+/* Timeline CSS */
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 20px auto 0 auto; /* Menambahkan margin atas dan tengah otomatis */
+    padding: 10px 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background: #00bcd4; /* Garis vertikal cyan */
+    top: 0;
+    bottom: 0;
+    left: 70%;
+    transform: translateX(-50%);
+    z-index: 1;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.7); /* Bayangan garis */
+}
+
+.container {
+    position: relative;
+    width: 60%;
+    padding: 10px 30px;
+    background-color: #2e2e2e;
+    border-radius: 12px;
+    box-shadow: 0 6px 40px rgba(0, 255, 255, 0.6);
+    margin-bottom: 60px; /* Menambahkan jarak bawah */
+    margin-top: 10px;
+    box-sizing: border-box;
+    z-index: 2;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.container.left {
+    left: 10;
+    text-align: right; /* Teks rata kanan */
+}
+
+.container.right {
+    left: 20%;
+    text-align: left; /* Teks rata kiri */
+}
+
+.content {
+    padding: 10px;
+    background-color: #1c1c1c;
+    border: 1px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 6px 30px rgba(0, 255, 255, 0.6);
+    transition: transform 0.3s ease, box-shadow 0.4s ease-in-out;
+}
+
+.container.left .content:hover,
+.container.right .content:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 35px rgba(0, 255, 255, 0.7);
+}
+
+.container.left::before,
+.container.right::before {
+    content: "";
+    position: absolute;
+    width: 24px; /* Ukuran titik lebih besar */
+    height: 24px; /* Ukuran titik lebih besar */
+    background: radial-gradient(circle, #00bcd4, #00796b); /* Titik gradien */
+    border-radius: 50%;
+    top: 20px; /* Menambahkan jarak atas */
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8); /* Bayangan titik lebih besar */
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    z-index: 3;
+}
+
+.container.left::before {
+    right: -12px; /* Titik pada sisi kanan */
+}
+
+.container.right::before {
+    left: -12px; /* Titik pada sisi kiri */
+}
+
+.container.left::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: -20px; /* Menambahkan jarak */
+    border-style: solid;
+    border-width: 12px 0 12px 12px;
+    border-color: transparent transparent transparent #1c1c1c;
+}
+
+.container.right::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: -20px; /* Menambahkan jarak */
+    border-style: solid;
+    border-width: 12px 12px 12px 0;
+    border-color: transparent #1c1c1c transparent transparent;
+}
+
+@media screen and (max-width: 600px) {
+    .timeline::before {
+        left: 31px;
+    }
+
+    .container {
+        width: calc(80% - 40px);
+        padding: 15px;
+        margin: 15px 0;
+        left: 0; /* Mengatur ulang posisi pada layar kecil */
+        text-align: left; /* Menyelaraskan teks */
+    }
+
+    .container.left,
+    .container.right {
+        width: 80%; /* Menyusun ulang tampilan pada layar kecil */
+        position: relative; /* Menghapus posisi absolut pada layar kecil */
+        margin: 0; /* Menghapus margin */
+        text-align: left; /* Menyelaraskan teks */
+    }
+
+    .container.left::before,
+    .container.right::before {
+        left: 20px;
+        right: auto;
+    }
+}
